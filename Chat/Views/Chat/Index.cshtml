@@ -21,7 +21,7 @@
 
             $.getJSON('/api/ChatApi/GetAllUsers').done(function (data) {
                 $.each(data, function (key, item) {
-                    $('#onlineUsers').append(item + '<br/>');
+                    $('#onlineUsers').append('<span id="' + item + '">' + item +  '</span><br/>');
                 });
             });
 
@@ -55,18 +55,18 @@
 
             //UserLogIn
             chat.client.broadcastUserLogIn = function (username) {
-                $('#onlineUsers').append(username);
+                $('#onlineUsers').append('<span id="' + username + '">' + username + '</span><br/>');
             };
 
             //UsetLogOut
             chat.client.broadcastUserLogOut = function (username) {
-                $('#onlineUsers').remove(":contains('" + username + "')");
+                $('#' + username).remove();
             };
 
             //KeepAlive
             setInterval(function () {
-                $.post('/api/ChatApi/KeepAlive', { 'username': '@Model.Username' });
-            }, 60000);
+                $.post('/api/ChatApi/KeepAlive', { '': '@Model.Username' });
+            }, 30000);
         });
 
     </script>

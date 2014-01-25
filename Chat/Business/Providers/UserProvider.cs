@@ -46,7 +46,7 @@ namespace Chat.Business.Providers
 
                 Users.Add(new User
                     {
-                        Username = username.ToLower(),
+                        Username = username,
                         ConnectionDate = DateTime.Now,
                         LastCheck = DateTime.Now
                     });
@@ -65,7 +65,7 @@ namespace Chat.Business.Providers
 
         public bool IsUserRegistered(string username)
         {
-            return Users.SingleOrDefault(p => p.Username == username.ToLower()) != null;
+            return Users.SingleOrDefault(p => p.Username == username) != null;
         }
 
         public IList<string> GetUsers()
