@@ -109,3 +109,4 @@ C:\Users\J\Dropbox\Sorgenti\C#\VS2012\Chat\Chat\bin\System.Web.WebPages.Razor.xm
 C:\Users\J\Dropbox\Sorgenti\C#\VS2012\Chat\Chat\obj\Debug\Chat.csprojResolveAssemblyReference.cache
 C:\Users\J\Dropbox\Sorgenti\C#\VS2012\Chat\Chat\obj\Debug\Chat.dll
 C:\Users\J\Dropbox\Sorgenti\C#\VS2012\Chat\Chat\obj\Debug\Chat.pdb
+C:\Users\J\Dropbox\Sorgenti\C#\VS2012\Chat\Chat\bin\Munq.IocContainer.dll
