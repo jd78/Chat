@@ -38,8 +38,9 @@
 
             chat.client.broadcastMessage = function (name, message) {
                 var listItem = '<span class="red">' + name + "</span><span>: " + message + '</span><br />';
-
-                $('#chatBody').append(listItem);
+                var body = $('#chatBody');
+                body.append(listItem);
+                body.scrollTop(body.prop("scrollHeight"))
             };
 
             var displayName = "@Model.Username";
