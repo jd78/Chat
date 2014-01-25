@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Chat.Models;
 using System.Threading;
+using Microsoft.AspNet.SignalR;
 
 namespace Chat.Business.Providers
 {
@@ -26,12 +27,14 @@ namespace Chat.Business.Providers
 
         void Users_OnRemove(object sender, EventArgs e)
         {
-            
+            var context = GlobalHost.ConnectionManager.GetHubContext<ChatHub>();
+            context.Clients.All.broadcastUserLogOut(((User)sender).Username);
         }
 
         void Users_OnAdd(object sender, EventArgs e)
         {
-            
+            var context = GlobalHost.ConnectionManager.GetHubContext<ChatHub>();
+            context.Clients.All.broadcastUserLogIn(((User)sender).Username);
         }
 
         public bool Login(string username)

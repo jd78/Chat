@@ -23,6 +23,9 @@ namespace Chat.Controllers
 
         public ActionResult Index()
         {
+            if (Session["User"] != null)
+                return Redirect("/Chat/index");
+ 
             return View();
         }
 

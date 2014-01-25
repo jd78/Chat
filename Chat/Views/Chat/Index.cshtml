@@ -18,15 +18,15 @@
     <script src="@Url.Content("~/signalr/hubs")"></script>
     <script>
         $(document).ready(function () {
-            
+
             $.getJSON('/api/ChatApi/GetAllUsers').done(function (data) {
                 $.each(data, function (key, item) {
-                    $('#onlineUsers').append(item);
+                    $('#onlineUsers').append(item + '<br/>');
                 });
             });
 
-            $('#chat-message').on("keyup", function(e) {
-                var code = e.which; 
+            $('#chat-message').on("keyup", function (e) {
+                var code = e.which;
                 if (code == 13) {
                     $('#sendmessage').click();
                 }
@@ -38,7 +38,7 @@
                 var listItem = '<span class="red">' + name + "</span><span>: " + message + '</span><br />';
                 var body = $('#chatBody');
                 body.append(listItem);
-                body.scrollTop(body.prop("scrollHeight"))
+                body.scrollTop(body.prop("scrollHeight"));
             };
 
             var displayName = "@Model.Username";
@@ -52,7 +52,17 @@
                     }
                 });
             });
-            
+
+            //UserLogIn
+            chat.client.broadcastUserLogIn = function (username) {
+                $('#onlineUsers').append(username);
+            };
+
+            //UsetLogOut
+            chat.client.broadcastUserLogOut = function (username) {
+                $('#onlineUsers').remove(":contains('" + username + "')");
+            };
+
             //KeepAlive
             setInterval(function () {
                 $.post('/api/ChatApi/KeepAlive', { 'username': '@Model.Username' });
@@ -63,68 +73,39 @@
 
 </head>
 <body class="bodyMargin">
-    <div class="col-md-2">
-        <div class="panel panel-primary">
-            <div class="panel-heading">
-                <h3 class="panel-title">Online Users</h3>
-            </div>
-            <div id="onlineUsers" class="panel-body">
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-10">
-        <div class="panel panel-primary">
-            <div class="panel-heading">
-                <h3 class="panel-title">Chat</h3>
-            </div>
-            <div id="chatBody" class="panel-body" style="height: 500px; overflow: auto;">
-            </div>
-            <div class="panel-footer">
-                <div class="row">
-                    <div class="col-lg-10">
-                        @Html.TextBox("chat-message", null, new { @class = "form-control" })
-                    </div>
-                    <div class="col-lg-2">
-                        <input type="button" id="sendmessage" value="Send" class="btn btn-primary" />
-                    </div>
+    <div class="container">
+        <div class="col-md-2">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Online Users</h3>
+                </div>
+                <div id="onlineUsers" class="panel-body">
                 </div>
             </div>
         </div>
-    </div>
 
-    @*<div id="chat-conversation">
-            Message:
-            <input type="text" id="chat-message" />
-            <input type="button" id="sendmessage" value="send" />
-            <ul id="discussion">
-            </ul>
+        <div class="col-md-10">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Chat</h3>
+                </div>
+                <div id="chatBody" class="panel-body" style="height: 500px; overflow: auto;">
+                </div>
+                <div class="panel-footer">
+                    <div class="row">
+                        <div class="col-lg-10">
+                            @Html.TextBox("chat-message", null, new { @class = "form-control" })
+                        </div>
+                        <div class="col-lg-2">
+                            <input type="button" id="sendmessage" value="Send" class="btn btn-primary" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-10 col-lg-offset-10">
+                @Html.ActionLink("LogOut", "LogOut", "Chat", new {@class="btn btn-danger"})
+            </div>
         </div>
-
-        <script src="@Url.Content("~/Scripts/jquery-1.9.1.js")"></script>
-        <script src="@Url.Content("~/Scripts/jquery.signalR-2.0.1.js")"></script>
-        <script src="@Url.Content("~/signalr/hubs")"></script>
-
-        <script type="text/javascript">
-            $(function () {
-                var chat = $.connection.chatHub;
-
-                chat.client.broadcastMessage = function (name, message) {
-                    var listItem = '<li>' + name + ": " + message + '</li>';
-
-                    $('#discussion').append(listItem);
-                };
-
-                var displayName = "@Model.Username";
-                $('#chat-message').focus();
-
-                $.connection.hub.start().done(function () {
-                    $('#sendmessage').click(function () {
-                        chat.server.send(displayName, $('#chat-message').val());
-                        $('#chat-message').val('').focus();
-                    });
-                });
-            });
-        </script>*@
+    </div>
 </body>
 </html>

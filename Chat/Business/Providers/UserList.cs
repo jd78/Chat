@@ -11,13 +11,13 @@ namespace Chat.Business.Providers
 
         public new void Add(User item)
         {
-            OnAdd(this, null);
+            OnAdd(item, null);
             base.Add(item);
         }
 
         public new void Remove(User item)
         {
-            OnRemove(this, null);
+            OnRemove(item, null);
             base.Remove(item);
         }
     }
