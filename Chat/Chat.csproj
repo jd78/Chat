@@ -129,9 +129,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Business\IocContainerManager.cs" />
+    <Compile Include="Business\Providers\UserList.cs" />
     <Compile Include="Business\Providers\UserProvider.cs" />
     <Compile Include="Business\Services\IUserService.cs" />
     <Compile Include="ChatHub.cs" />
+    <Compile Include="Controllers\ChatApiController.cs" />
     <Compile Include="Controllers\ChatController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">

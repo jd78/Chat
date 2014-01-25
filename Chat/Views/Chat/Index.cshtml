@@ -10,12 +10,40 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>Index</title>
-</head>
-<body>
-    <div>
-        <h2>Chat</h2>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/SiteStyle.css" rel="stylesheet" />
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="@Url.Content("~/Scripts/jquery-1.9.1.js")"></script>
+    <script src="@Url.Content("~/Scripts/jquery.signalR-2.0.1.js")"></script>
+    <script src="@Url.Content("~/signalr/hubs")"></script>
+    <script>
+        $(document).ready(function () {
+            var url = '/api/ChatApi';
+            $.getJSON(url).done(function (data) {
+                // On success, 'data' contains a list of products.
+                $.each(data, function (key, item) {
+                    // Add a list item for the product.
+                    $('#onlineUsers').append(item);
+                });
+            });
 
-        <div id="chat-conversation">
+        });
+
+    </script>
+
+</head>
+<body class="bodyMargin">
+    <div class="col-md-2">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Online Users</h3>
+            </div>
+            <div id="onlineUsers" class="panel-body">
+            </div>
+        </div>
+    </div>
+
+    @*<div id="chat-conversation">
             Message:
             <input type="text" id="chat-message" />
             <input type="button" id="sendmessage" value="send" />
@@ -47,7 +75,6 @@
                     });
                 });
             });
-        </script>
-    </div>
+        </script>*@
 </body>
 </html>
