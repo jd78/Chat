@@ -30,5 +30,11 @@ namespace Chat.Controllers
         {
             return _userService.GetUsers();
         }
+
+        [HttpPost]
+        public void KeepAlive([FromBody]string username)
+        {
+            _userService.KeepAlive(username);
+        }
     }
 }

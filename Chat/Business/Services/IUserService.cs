@@ -14,6 +14,6 @@ namespace Chat.Business.Services
         void Logout(string username);
         bool IsUserRegistered(string username);
         IList<string> GetUsers();
-
+        void KeepAlive(string username);
     }
 }

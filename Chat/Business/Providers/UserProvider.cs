@@ -70,6 +70,13 @@ namespace Chat.Business.Providers
             return Users.OrderBy(p => p.Username).Select(p => p.Username).ToList();
         }
 
+        public void KeepAlive(string username)
+        {
+            var user = Users.SingleOrDefault(p => p.Username == username);
+            if (user != null)
+                user.LastCheck = DateTime.Now;
+        }
+
         private void CheckAlive()
         {
             while (true)
