@@ -21,7 +21,7 @@
 
             $.getJSON('/api/ChatApi/GetAllUsers').done(function (data) {
                 $.each(data, function (key, item) {
-                    $('#onlineUsers').append('<span id="' + item + '">' + item +  '</span><br/>');
+                    $('#onlineUsers').append('<div id="' + item + '">' + item +  '</div>');
                 });
             });
 
@@ -55,7 +55,7 @@
 
             //UserLogIn
             chat.client.broadcastUserLogIn = function (username) {
-                $('#onlineUsers').append('<span id="' + username + '">' + username + '</span><br/>');
+                $('#onlineUsers').append('<div id="' + username + '">' + username + '</div>');
             };
 
             //UsetLogOut
