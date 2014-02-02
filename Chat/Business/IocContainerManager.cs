@@ -19,6 +19,7 @@ namespace Chat.Business
             ContainerManager = new IocContainer();
 
             ContainerManager.Register<IUserService, UserProvider>().AsCached();
+            ContainerManager.Register<IChatHubService, ChatHubProvider>().AsCached();
         }
 
         public T ResolveDependency<T>() where T : class

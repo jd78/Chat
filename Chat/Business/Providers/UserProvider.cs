@@ -1,12 +1,10 @@
-﻿using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Chat.Business.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Chat.Models;
 using System.Threading;
-using Microsoft.AspNet.SignalR;
 
 namespace Chat.Business.Providers
 {
@@ -14,9 +12,12 @@ namespace Chat.Business.Providers
     {
         private UserList Users { get; set; }
         private readonly object _lockList = new object();
+        private readonly IChatHubService _chatHubService;
 
-        public UserProvider()
+        public UserProvider(IChatHubService chatHubService)
         {
+            _chatHubService = chatHubService;
+
             Users = new UserList();
             Users.OnAdd += Users_OnAdd;
             Users.OnRemove += Users_OnRemove;
@@ -27,14 +28,12 @@ namespace Chat.Business.Providers
 
         void Users_OnRemove(object sender, EventArgs e)
         {
-            var context = GlobalHost.ConnectionManager.GetHubContext<ChatHub>();
-            context.Clients.All.broadcastUserLogOut(((User)sender).Username);
+            _chatHubService.RemoveUser(((User)sender).Username);
         }
 
         void Users_OnAdd(object sender, EventArgs e)
         {
-            var context = GlobalHost.ConnectionManager.GetHubContext<ChatHub>();
-            context.Clients.All.broadcastUserLogIn(((User)sender).Username);
+            _chatHubService.AddUser(((User)sender).Username);
         }
 
         public bool Login(string username)
