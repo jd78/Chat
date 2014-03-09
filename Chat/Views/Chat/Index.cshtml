@@ -14,63 +14,15 @@
     <link href="~/Content/SiteStyle.css" rel="stylesheet" />
     <script src="@Url.Content("~/Scripts/jquery-1.9.1.js")"></script>
     <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/knockout-3.1.0.js"></script>
     <script src="@Url.Content("~/Scripts/jquery.signalR-2.0.1.js")"></script>
     <script src="@Url.Content("~/signalr/hubs")"></script>
+    
+    @*Core chat script*@
+    <script src="~/Scripts/chat.js"></script>
     <script>
-        $(document).ready(function () {
-
-            $.getJSON('/api/ChatApi/GetAllUsers').done(function (data) {
-                $.each(data, function (key, item) {
-                    $('#onlineUsers').append('<div id="' + item + '">' + item +  '</div>');
-                });
-            });
-
-            $('#chat-message').on("keyup", function (e) {
-                var code = e.which;
-                if (code == 13) {
-                    $('#sendmessage').click();
-                }
-            });
-
-            var chat = $.connection.chatHub;
-
-            chat.client.broadcastMessage = function (name, message) {
-                var listItem = '<span class="red">' + name + "</span><span>: " + message + '</span><br />';
-                var body = $('#chatBody');
-                body.append(listItem);
-                body.scrollTop(body.prop("scrollHeight"));
-            };
-
-            var displayName = "@Model.Username";
-            $('#chat-message').focus();
-
-            $.connection.hub.start().done(function () {
-                $('#sendmessage').click(function () {
-                    if ($('#chat-message').val().length > 0) {
-                        chat.server.send(displayName, $('#chat-message').val());
-                        $('#chat-message').val('').focus();
-                    }
-                });
-            });
-
-            //UserLogIn
-            chat.client.broadcastUserLogIn = function (username) {
-                $('#onlineUsers').append('<div id="' + username + '">' + username + '</div>');
-            };
-
-            //UsetLogOut
-            chat.client.broadcastUserLogOut = function (username) {
-                $('#' + username).remove();
-            };
-
-            //KeepAlive
-            setInterval(function () {
-                $.post('/api/ChatApi/KeepAlive', { '': '@Model.Username' });
-            }, 30000);
-        });
-
+        displayName = "@Model.Username";
     </script>
-
 </head>
 <body class="bodyMargin">
     <div class="container">
@@ -79,25 +31,26 @@
                 <div class="panel-heading">
                     <h3 class="panel-title">Online Users</h3>
                 </div>
-                <div id="onlineUsers" class="panel-body">
+                <div id="onlineUsers" class="panel-body" data-bind="foreach: users">
+                    <div data-bind="text: $data"></div>
                 </div>
             </div>
         </div>
-
         <div class="col-md-10">
             <div class="panel panel-primary">
                 <div class="panel-heading">
                     <h3 class="panel-title">Chat</h3>
                 </div>
-                <div id="chatBody" class="panel-body" style="height: 500px; overflow: auto;">
+                <div id="chatBody" class="panel-body" style="height: 500px; overflow: auto;" data-bind="foreach: chatBody">
+                    <span class="red" data-bind="text: name"></span><span>: </span><span data-bind="text:message"></span><br />
                 </div>
                 <div class="panel-footer">
                     <div class="row">
                         <div class="col-lg-10">
-                            @Html.TextBox("chat-message", null, new { @class = "form-control" })
+                            @Html.TextBox("chat-message", null, new { @class = "form-control", @data_bind = "value: message, valueUpdate: 'afterkeydown', event:{ keyup: ChatMessageKeyup }, hasfocus: true"})
                         </div>
                         <div class="col-lg-2">
-                            <input type="button" id="sendmessage" value="Send" class="btn btn-primary" />
+                            <input type="button" id="sendmessage" value="Send" class="btn btn-primary" data-bind="click: SendMessage, enable: message().length > 0" />
                         </div>
                     </div>
                 </div>
