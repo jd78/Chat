@@ -7,8 +7,6 @@ namespace Chat.Controllers
 {
     public class HomeController : Controller
     {
-        //
-        // GET: /Home/
         private readonly IUserService _userService;
 
         public HomeController() : this(IocContainerManager.Instance.ResolveDependency<IUserService>())
