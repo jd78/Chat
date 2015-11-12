@@ -12,6 +12,5 @@ namespace Chat.Controllers
         {
             return View(Session["User"]);
         }
-
     }
 }
